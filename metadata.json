@@ -1,0 +1,6 @@
+{
+  "name": "AEREO | Luxury Brand & Experience Showcase",
+  "description": "A refined, high-end digital showcase and brand sanctuary engineered for luxury collections, bespoke experiences, and seamless client consultations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

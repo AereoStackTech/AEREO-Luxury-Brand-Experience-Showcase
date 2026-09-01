@@ -1,0 +1,72 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@layer base {
+  :root {
+    --background: 40 20% 98%;
+    --foreground: 0 0% 8%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 8%;
+    --primary: 36 38% 64%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 10% 94%;
+    --secondary-foreground: 0 0% 15%;
+    --muted: 40 10% 92%;
+    --muted-foreground: 30 5% 45%;
+    --accent: 36 40% 64%;
+    --accent-foreground: 0 0% 10%;
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 35 15% 90%;
+    --input: 35 15% 90%;
+    --ring: 36 38% 64%;
+    --radius: 0.25rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color: #121212;
+    background-color: #FAF8F5;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    background-color: #FAF8F5;
+    color: #161616;
+    overflow-x: hidden;
+    selection-background-color: #C5A880;
+    selection-color: #ffffff;
+  }
+}
+
+::selection {
+  background-color: #C5A880;
+  color: #111111;
+}
+
+/* Custom refined luxury styling */
+.font-serif-luxury {
+  font-family: var(--font-cormorant), Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+.font-sans-luxury {
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.luxury-border {
+  border-color: rgba(197, 168, 128, 0.25);
+}
+
+.luxury-border-hover:hover {
+  border-color: rgba(197, 168, 128, 0.6);
+}
+
+.gold-gradient-text {
+  background: linear-gradient(135deg, #DFCA9B 0%, #C5A880 50%, #9B7E55 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-border-glow {
+  box-shadow: 0 0 25px -5px rgba(197, 168, 128, 0.15);
+}
