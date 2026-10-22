@@ -5,20 +5,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 import {
   Shield,
-  Clock,
   Sparkles,
   ArrowLeft,
-  Calendar,
-  CheckCircle,
-  Gem,
+  ArrowRight,
   Award,
   ChevronRight,
-  Send,
+  ChevronLeft,
 } from 'lucide-react';
 import { ProductItemData } from '@/lib/db';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { InquiryForm } from './inquiry-form';
+import { useLanguage } from '@/lib/i18n/context';
 import {
   Dialog,
   DialogContent,
@@ -33,6 +31,7 @@ interface ProductDetailViewProps {
 }
 
 export function ProductDetailView({ product }: ProductDetailViewProps) {
+  const { t, isRtl } = useLanguage();
   const images = product.images?.length > 0
     ? product.images
     : ['https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1600&q=85'];
@@ -49,22 +48,24 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
   };
 
   const specs = product.specifications as Record<string, string> | null;
+  const BackArrow = isRtl ? ArrowRight : ArrowLeft;
+  const ChevronIcon = isRtl ? ChevronLeft : ChevronRight;
 
   return (
     <div className="space-y-16" id={`product-detail-${product.slug}`}>
       {/* Breadcrumbs */}
       <nav className="flex items-center space-x-2 text-xs uppercase tracking-[0.18em] text-[#8C827A]" aria-label="Breadcrumb">
         <Link href="/catalog" className="hover:text-[#141414] transition-colors flex items-center gap-1">
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Collections</span>
+          <BackArrow className="w-3.5 h-3.5" />
+          <span>{t('product.back', 'Collections')}</span>
         </Link>
-        <ChevronRight className="w-3 h-3 text-[#DDD7CD]" />
+        <ChevronIcon className="w-3 h-3 text-[#DDD7CD]" />
         {product.category && (
           <>
             <Link href={`/catalog?category=${product.category.slug}`} className="hover:text-[#141414] transition-colors">
               {product.category.name}
             </Link>
-            <ChevronRight className="w-3 h-3 text-[#DDD7CD]" />
+            <ChevronIcon className="w-3 h-3 text-[#DDD7CD]" />
           </>
         )}
         <span className="text-[#141414] font-medium truncate max-w-xs">{product.title}</span>
@@ -87,10 +88,10 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
             />
 
             {product.isFeatured && (
-              <div className="absolute top-6 left-6">
+              <div className="absolute top-6 start-6">
                 <Badge variant="gold" className="backdrop-blur-md">
-                  <Sparkles className="w-3 h-3 mr-1" />
-                  Limited Masterwork
+                  <Sparkles className="w-3 h-3 me-1" />
+                  {t('featured.badge', 'Limited Masterwork')}
                 </Badge>
               </div>
             )}
@@ -135,7 +136,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               )}
               <span className="text-[#DDD7CD]">·</span>
               <span className="text-xs uppercase tracking-[0.2em] text-[#8C827A]">
-                Geneva Atelier Registry
+                {t('product.in_stock', 'In Private Vault')}
               </span>
             </div>
 
@@ -154,14 +155,14 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
             {/* Price Presentation */}
             <div className="p-5 border border-[#E8E3DA] bg-white space-y-1">
               <span className="text-[10px] uppercase tracking-[0.25em] text-[#8C827A]">
-                Patron Acquisition Reference
+                {t('product.acquire_title', 'Patron Acquisition Reference')}
               </span>
               <div className="flex items-baseline space-x-3">
                 <span className="font-serif text-3xl sm:text-4xl text-[#121212] font-normal">
                   {formatPrice(product.price, product.currency)}
                 </span>
                 <span className="text-xs uppercase tracking-wider text-[#8C827A]">
-                  Taxes & Armored Transport Included
+                  {t('product.transport_desc', 'Taxes & Armored Transport Included')}
                 </span>
               </div>
             </div>
@@ -170,7 +171,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
             <div className="space-y-4 text-sm sm:text-base text-[#44403C] leading-relaxed font-sans">
               <p>{product.description}</p>
               {product.details && (
-                <div className="p-4 bg-[#FAF8F5] border-l-2 border-[#C5A880] text-xs sm:text-sm text-[#57534E] leading-relaxed">
+                <div className="p-4 bg-[#FAF8F5] border-s-2 border-[#C5A880] text-xs sm:text-sm text-[#57534E] leading-relaxed">
                   {product.details}
                 </div>
               )}
@@ -186,14 +187,14 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                     size="lg"
                     className="w-full justify-center text-xs tracking-[0.25em]"
                   >
-                    <span>Request Private Consultation</span>
+                    <span>{t('product.consultation_cta', 'Request Private Consultation')}</span>
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>Private Consultation & Acquisition</DialogTitle>
+                    <DialogTitle>{t('product.acquire_title', 'Private Consultation & Acquisition')}</DialogTitle>
                     <DialogDescription>
-                      Submit your confidential inquiry for <span className="font-medium text-[#141414]">{product.title}</span>. Our private client team coordinates viewings and bespoke commissions globally.
+                      {t('contact.subtitle', 'Submit your confidential inquiry for')} <span className="font-medium text-[#141414]">{product.title}</span>.
                     </DialogDescription>
                   </DialogHeader>
                   <div className="pt-4">
@@ -213,7 +214,7 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
                 className="w-full justify-center text-xs tracking-[0.2em]"
               >
                 <Link href="/contact">
-                  <span>Speak with Salon Director</span>
+                  <span>{t('nav.consultation', 'Speak with Salon Director')}</span>
                 </Link>
               </Button>
             </div>
@@ -223,15 +224,15 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
               <div className="flex items-start space-x-2.5">
                 <Award className="w-4 h-4 text-[#C5A880] shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-[#141414]">Artisanal Provenance</p>
-                  <p className="text-[11px] text-[#8C827A]">Numbered certificate & NFC registry</p>
+                  <p className="font-medium text-[#141414]">{t('hero.provenance', 'Artisanal Provenance')}</p>
+                  <p className="text-[11px] text-[#8C827A]">{t('hero.provenance_desc', 'Numbered certificate & NFC registry')}</p>
                 </div>
               </div>
               <div className="flex items-start space-x-2.5">
                 <Shield className="w-4 h-4 text-[#C5A880] shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-medium text-[#141414]">Armored Dispatch</p>
-                  <p className="text-[11px] text-[#8C827A]">Full global transit insurance</p>
+                  <p className="font-medium text-[#141414]">{t('hero.security', 'Armored Dispatch')}</p>
+                  <p className="text-[11px] text-[#8C827A]">{t('hero.security_desc', 'Full global transit insurance')}</p>
                 </div>
               </div>
             </div>
@@ -244,10 +245,10 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
         <div className="pt-12 border-t border-[#E8E3DA] space-y-8">
           <div className="space-y-2">
             <span className="text-xs uppercase tracking-[0.25em] text-[#C5A880] font-medium">
-              Technical Architecture
+              {t('catalog.specifications', 'Technical Architecture')}
             </span>
             <h2 className="font-serif text-2xl sm:text-3xl text-[#141414]">
-              Specifications & Material Composition
+              {t('catalog.specifications', 'Specifications & Material Composition')}
             </h2>
           </div>
 
@@ -274,13 +275,13 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
         <div className="max-w-3xl mx-auto space-y-8">
           <div className="text-center space-y-3">
             <span className="text-xs uppercase tracking-[0.25em] text-[#C5A880] font-medium">
-              Direct Atelier Dialogue
+              {t('cta.badge', 'Direct Atelier Dialogue')}
             </span>
             <h3 className="font-serif text-2xl sm:text-3xl text-[#141414]">
-              Inquire Regarding {product.title}
+              {t('featured.inquire', 'Inquire Regarding')} {product.title}
             </h3>
             <p className="text-sm text-[#78716C] max-w-lg mx-auto">
-              Our Geneva atelier accommodates bespoke engraving, custom sizing, and private viewing arrangements in your home city.
+              {t('contact.subtitle', 'Our Geneva atelier accommodates bespoke engraving, custom sizing, and private viewing arrangements in your home city.')}
             </p>
           </div>
 
@@ -293,3 +294,4 @@ export function ProductDetailView({ product }: ProductDetailViewProps) {
     </div>
   );
 }
+

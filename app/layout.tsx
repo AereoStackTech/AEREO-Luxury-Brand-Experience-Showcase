@@ -31,6 +31,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { LanguageProvider } from '@/lib/i18n/context';
+
 export default function RootLayout({
   children,
 }: {
@@ -39,7 +41,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${cormorant.variable} ${jakarta.variable}`}>
       <body className="min-h-screen bg-[#FAF8F5] text-[#141414] font-sans antialiased selection:bg-[#C5A880] selection:text-[#111111]">
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

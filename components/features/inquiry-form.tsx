@@ -8,6 +8,7 @@ import { submitInquiryAction } from '@/app/actions/inquiry';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/lib/i18n/context';
 import { CheckCircle2, Send, ShieldCheck, Loader2, Sparkles } from 'lucide-react';
 
 interface InquiryFormProps {
@@ -21,6 +22,7 @@ export function InquiryForm({
   initialProductTitle,
   compact = false,
 }: InquiryFormProps) {
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
@@ -76,13 +78,13 @@ export function InquiryForm({
 
         <div className="space-y-2">
           <span className="text-xs uppercase tracking-[0.25em] text-[#C5A880] font-medium">
-            Transmission Confirmed
+            {t('contact.success_title', 'Transmission Confirmed')}
           </span>
           <h3 className="font-serif text-2xl sm:text-3xl text-[#141414] font-normal">
-            Your Private Consultation is Received
+            {t('contact.success_title', 'Your Private Consultation is Received')}
           </h3>
           <p className="text-sm text-[#736E67] max-w-md mx-auto leading-relaxed font-sans">
-            Our Private Client Liaison has logged your request. We will reach out discreetly to your provided email within 12 hours.
+            {t('contact.success_desc', 'Our Private Client Liaison has logged your request. We will reach out discreetly to your provided email within 12 hours.')}
           </p>
         </div>
 
@@ -93,7 +95,7 @@ export function InquiryForm({
             onClick={() => setIsSuccess(false)}
             className="tracking-[0.2em]"
           >
-            Submit Another Request
+            {t('contact.form_submit', 'Submit Another Request')}
           </Button>
         </div>
       </div>
@@ -104,7 +106,7 @@ export function InquiryForm({
     <form
       id="client-inquiry-form"
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 text-left"
+      className="space-y-6 text-start"
       noValidate
     >
       {serverError && (
@@ -128,11 +130,11 @@ export function InquiryForm({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="space-y-1.5">
           <label className="text-[11px] uppercase tracking-[0.2em] font-medium text-[#44403C]">
-            Full Name <span className="text-[#C5A880]">*</span>
+            {t('contact.form_name', 'Full Name')} <span className="text-[#C5A880]">*</span>
           </label>
           <Input
             id="inquiry-client-name"
-            placeholder="e.g. Lady Vivienne Montgomery"
+            placeholder={t('contact.form_name_placeholder', 'e.g. Lord Alistair Vance')}
             {...register('clientName')}
             className={errors.clientName ? 'border-rose-400 focus-visible:border-rose-500' : ''}
           />
@@ -143,12 +145,12 @@ export function InquiryForm({
 
         <div className="space-y-1.5">
           <label className="text-[11px] uppercase tracking-[0.2em] font-medium text-[#44403C]">
-            Confidential Email <span className="text-[#C5A880]">*</span>
+            {t('contact.form_email', 'Confidential Email')} <span className="text-[#C5A880]">*</span>
           </label>
           <Input
             id="inquiry-client-email"
             type="email"
-            placeholder="v.montgomery@estate.ch"
+            placeholder={t('contact.form_email_placeholder', 'client@domain.com')}
             {...register('clientEmail')}
             className={errors.clientEmail ? 'border-rose-400 focus-visible:border-rose-500' : ''}
           />
@@ -162,19 +164,19 @@ export function InquiryForm({
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div className="space-y-1.5">
           <label className="text-[11px] uppercase tracking-[0.2em] font-medium text-[#44403C]">
-            Direct Phone / Signal (Optional)
+            {t('contact.form_phone', 'Direct Phone / Signal (Optional)')}
           </label>
           <Input
             id="inquiry-client-phone"
             type="tel"
-            placeholder="+41 22 819 0000"
+            placeholder={t('contact.form_phone_placeholder', '+41 22 819 0000')}
             {...register('phone')}
           />
         </div>
 
         <div className="space-y-1.5">
           <label className="text-[11px] uppercase tracking-[0.2em] font-medium text-[#44403C]">
-            Preferred Timing / Season
+            {t('contact.form_date', 'Preferred Timing / Date (Optional)')}
           </label>
           <Input
             id="inquiry-client-date"
@@ -187,11 +189,11 @@ export function InquiryForm({
       {/* Service Type Selection */}
       <div className="space-y-1.5">
         <label className="text-[11px] uppercase tracking-[0.2em] font-medium text-[#44403C]">
-          Nature of Engagement
+          {t('contact.form_service', 'Nature of Engagement / Commission')}
         </label>
         <Input
           id="inquiry-service-type"
-          placeholder="e.g. Bespoke Commission, Private Salon Viewing, Villa Residency"
+          placeholder={t('contact.form_service_default', 'e.g. Bespoke Commission, Private Salon Viewing, Villa Residency')}
           {...register('serviceType')}
         />
       </div>
@@ -199,12 +201,12 @@ export function InquiryForm({
       {/* Message Textarea */}
       <div className="space-y-1.5">
         <label className="text-[11px] uppercase tracking-[0.2em] font-medium text-[#44403C]">
-          Personalized Request & Specifications <span className="text-[#C5A880]">*</span>
+          {t('contact.form_message', 'Personalized Request & Specifications')} <span className="text-[#C5A880]">*</span>
         </label>
         <Textarea
           id="inquiry-message"
           rows={compact ? 3 : 5}
-          placeholder="Please outline your bespoke requirements, desired customization, location preferences, or scheduling parameters..."
+          placeholder={t('contact.form_message_placeholder', 'Please outline your bespoke requirements, desired customization, location preferences, or scheduling parameters...')}
           {...register('message')}
           className={errors.message ? 'border-rose-400 focus-visible:border-rose-500' : ''}
         />
@@ -217,7 +219,7 @@ export function InquiryForm({
       <div className="pt-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t border-[#E8E3DA] pt-5">
         <div className="flex items-center space-x-2 text-[11px] text-[#78716C]">
           <ShieldCheck className="w-4 h-4 text-[#C5A880]" />
-          <span>Encrypted transmission & strict client discretion</span>
+          <span>{t('contact.form_discretion', 'Encrypted transmission & strict client discretion')}</span>
         </div>
 
         <Button
@@ -231,11 +233,11 @@ export function InquiryForm({
           {isSubmitting ? (
             <span className="flex items-center space-x-2">
               <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Transmitting...</span>
+              <span>{t('contact.form_submitting', 'Transmitting...')}</span>
             </span>
           ) : (
             <span className="flex items-center space-x-2">
-              <span>Submit Request</span>
+              <span>{t('contact.form_submit', 'Submit Request')}</span>
               <Send className="w-3.5 h-3.5" />
             </span>
           )}
@@ -244,3 +246,4 @@ export function InquiryForm({
     </form>
   );
 }
+

@@ -3,11 +3,12 @@
 import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Compass } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Sparkles, Compass } from 'lucide-react';
 import { ProductItemData, CategoryData } from '@/lib/db';
 import { CatalogFilters } from './catalog-filters';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/lib/i18n/context';
 
 interface CatalogGridProps {
   products: ProductItemData[];
@@ -20,9 +21,12 @@ export function CatalogGrid({
   categories,
   initialCategory = 'all',
 }: CatalogGridProps) {
+  const { t, isRtl } = useLanguage();
   const [activeCategory, setActiveCategory] = useState<string>(initialCategory);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>('featured');
+
+  const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
 
   const filteredProducts = useMemo(() => {
     let result = [...products];
@@ -85,9 +89,11 @@ export function CatalogGrid({
       {filteredProducts.length === 0 ? (
         <div className="text-center py-20 px-6 border border-dashed border-[#DDD7CD] bg-[#FAF8F5] space-y-4">
           <Compass className="w-10 h-10 text-[#8C827A] mx-auto stroke-1" />
-          <h3 className="font-serif text-2xl text-[#141414]">No Creations Found</h3>
+          <h3 className="font-serif text-2xl text-[#141414]">
+            {t('catalog.empty_title', 'No Creations Found')}
+          </h3>
           <p className="text-sm text-[#78716C] max-w-md mx-auto">
-            We could not find any items matching your active filter criteria. Please try resetting your search parameters.
+            {t('catalog.empty_desc', 'Our curators can arrange bespoke acquisitions or commissions matching your exact specifications.')}
           </p>
           <Button
             variant="outline"
@@ -97,7 +103,7 @@ export function CatalogGrid({
               setSearchQuery('');
             }}
           >
-            Reset Filters
+            {t('catalog.empty_reset', 'Reset All Filters')}
           </Button>
         </div>
       ) : (
@@ -123,11 +129,11 @@ export function CatalogGrid({
                   />
 
                   {/* Badges Over Image */}
-                  <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+                  <div className="absolute top-4 start-4 flex flex-col gap-2 z-10">
                     {product.isFeatured && (
                       <Badge variant="gold" className="backdrop-blur-xs">
-                        <Sparkles className="w-3 h-3 mr-1" />
-                        Featured Atelier
+                        <Sparkles className="w-3 h-3 me-1" />
+                        {t('featured.badge', 'Featured Atelier')}
                       </Badge>
                     )}
                     {product.category && (
@@ -140,8 +146,8 @@ export function CatalogGrid({
                   {/* Subtle Dark Gradient overlay at bottom */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none flex items-end p-6">
                     <span className="text-xs uppercase tracking-[0.2em] text-[#FAF8F5] font-medium flex items-center gap-2">
-                      <span>View Specifications</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
+                      <span>{t('featured.piece_detail', 'Examine Piece')}</span>
+                      <ArrowIcon className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </div>
@@ -171,16 +177,18 @@ export function CatalogGrid({
                   {/* Price & Action */}
                   <div className="pt-4 border-t border-[#E8E3DA] flex items-center justify-between">
                     <div className="flex flex-col">
-                      <span className="text-[10px] uppercase tracking-[0.2em] text-[#8C827A]">Acquisition</span>
+                      <span className="text-[10px] uppercase tracking-[0.2em] text-[#8C827A]">
+                        {t('product.acquire_title', 'Acquisition')}
+                      </span>
                       <span className="font-serif text-lg text-[#141414] font-medium">
                         {formatPrice(product.price, product.currency)}
                       </span>
                     </div>
 
                     <Button asChild variant="outline" size="sm" className="group-hover:border-[#C5A880] group-hover:text-[#9B7E55]">
-                      <Link href={`/catalog/${product.slug}`}>
-                        <span>Details</span>
-                        <ArrowRight className="w-3 h-3 ml-1" />
+                      <Link href={`/catalog/${product.slug}`} className="flex items-center gap-1.5">
+                        <span>{t('featured.piece_detail', 'Details')}</span>
+                        <ArrowIcon className="w-3 h-3" />
                       </Link>
                     </Button>
                   </div>
@@ -193,3 +201,4 @@ export function CatalogGrid({
     </div>
   );
 }
+
